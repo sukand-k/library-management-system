@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from '../api/axios';
+import API from '../api/axios';
 import { useNavigate } from 'react-router-dom';
 
 function Login() {
@@ -13,10 +13,9 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('/auth/login', form);
+      const res = await API.post('auth/login', form);
       localStorage.setItem('token', res.data.token);
-      // set axios default header
-      try { const API = (await import('../api/axios')).default; API.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`; } catch(e){/* ignore */}
+      API.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
       setSuccess('Login successful!');
       setTimeout(() => navigate('/'), 1500);
     } catch (err) {
